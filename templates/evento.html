@@ -14,21 +14,50 @@
             background: #f5f5f5;
         }
 
-        /* Clase para las tarjetas de detalles, ahora adaptadas a un diseño de columnas */
+        /* Estilo base para las tarjetas */
         .top-card {
             background: #fff;
             border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden; 
         }
 
+        /* Estilo para la imagen del evento (Móvil) */
+        .event-hero-image {
+            width: 100%;
+            height: 250px; /* Altura fija en móvil */
+            object-fit: contain; /* CAMBIO: Asegura que la imagen no se corte */
+            object-position: center;
+            background-color: #f8f9fa; /* Fondo para el espacio vacío si el aspect ratio es diferente */
+        }
+
+        /* Estilos específicos para escritorio (>= 992px) */
+        @media (min-width: 992px) {
+            .event-image-container {
+                /* Centrar verticalmente la imagen dentro de la columna */
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                /* El padding coincide con el p-lg-5 de la columna de texto */
+                padding: 3rem; 
+            }
+
+            .event-hero-image {
+                /* CAMBIO: Limitar la altura de la imagen en escritorio, respetando aspect ratio */
+                max-height: 400px; 
+                height: auto;
+                /* Quitamos cualquier redondeado de borde innecesario en desktop */
+                border-radius: 0 !important; 
+            }
+        }
+
+        /* Estilos para el mapa */
         .map-container iframe {
             width: 100%;
             height: 300px;
             border-radius: 12px;
         }
 
-        /* Se eliminan las clases .hero-img, .hero-title y .top-row que definían el diseño anterior */
     </style>
 </head>
 
@@ -36,48 +65,73 @@
 
     <div class="container py-4">
 
-        <div class="row g-4 align-items-stretch"> 
-            
-            <div class="col-lg-8">
-                
-                <h1 class="fw-bold mb-3">{{ evento.nombre }}</h1> 
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="top-card p-0">
+                    <div class="row g-0"> 
 
-                <div class="top-card mb-4">
+                        <div class="col-12 col-lg-7 order-2 order-lg-1 p-4 p-lg-5">
 
-                    <div class="d-flex justify-content-between">
-                        <span class="badge bg-primary">{{ evento.tipo }}</span>
-                        <span class="text-muted small">
-                            <i class="far fa-calendar me-1"></i>{{ evento.fecha }} |
-                            <i class="far fa-clock ms-2 me-1"></i>{{ evento.hora }}
-                        </span>
-                    </div>
+                            <h1 class="fw-bold mb-3">{{ evento.nombre }}</h1>
 
-                    <p class="text-muted mt-2">{{ evento.descripcion }}</p>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-primary">{{ evento.tipo }}</span>
+                                <span class="text-muted small">
+                                    <i class="far fa-calendar me-1"></i>{{ evento.fecha }} |
+                                    <i class="far fa-clock ms-2 me-1"></i>{{ evento.hora }}
+                                </span>
+                            </div>
 
-                    <div class="mt-3 d-flex align-items-center">
-                        <i class="fas fa-map-marker-alt me-2 text-danger"></i>
-                        <h6 class="m-0">{{ evento.lugar_corto }}</h6>
-                    </div>
+                            <p class="text-muted mt-2">{{ evento.descripcion }}</p>
 
-                    {% if evento.direccion %}
-                    <div class="mt-1 ms-4 text-muted small">
-                        {{ evento.direccion }}
-                    </div>
-                    {% endif %}
+                            <div class="mt-3">
+                                <h6 class="m-0 fw-semibold">{{ evento.lugar_corto }}</h6>
+                            </div>
 
-                    <div class="mt-3">
-                        <h4 class="fw-bold">
-                            {% if evento.costo == "0" or evento.costo == "" %}
-                            Gratis
-                            {% else %}
-                            $ {{ evento.costo }}
+                            {% if evento.direccion %}
+                            <div class="mt-1 text-muted small">
+                                {{ evento.direccion }}
+                            </div>
                             {% endif %}
-                        </h4>
+
+                            <div class="mt-4">
+                                <h4 class="fw-bold">
+                                    {% if evento.costo == "0" or evento.costo == "" %}
+                                    Gratis
+                                    {% else %}
+                                    $ {{ evento.costo }}
+                                    {% endif %}
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-5 order-1 order-lg-2 event-image-container">
+                            <img src="{{ evento.imagen }}" class="img-fluid event-hero-image rounded-top-3 rounded-lg-0" 
+                                alt="{{ evento.tipo }}">
+                        </div>
+
                     </div>
-
                 </div>
+            </div>
+        </div>
 
-                <div class="top-card">
+        <div class="row g-4 mt-2">
+
+            <div class="col-lg-8">
+                <div class="map-container">
+
+                    {% set mapa_busqueda = (evento.direccion ~ ', ' ~ evento.lugar) if evento.direccion else evento.lugar %}
+
+                    <iframe 
+                        loading="lazy"
+                        allowfullscreen
+                        src="https://www.google.com/maps?q={{ mapa_busqueda | urlencode }}&output=embed">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="top-card h-100 p-4">
                     <h5 class="fw-bold mb-3"><i class="fas fa-bus me-2"></i>Transporte</h5>
 
                     <ul class="list-group shadow-sm mb-2">
@@ -92,25 +146,9 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
-
-            <div class="col-lg-4 d-none d-lg-block"> 
-                <img src="{{ evento.imagen }}" class="img-fluid rounded-3 h-100" 
-                    style="object-fit: cover; object-position: bottom;" 
-                    alt="{{ evento.tipo }}">
-            </div>
-
-        </div> <div class="map-container mt-4">
-
-            {% set mapa_busqueda = (evento.direccion ~ ', ' ~ evento.lugar) if evento.direccion else evento.lugar %}
-
-            <iframe 
-                loading="lazy"
-                allowfullscreen
-                src="https://www.google.com/maps?q={{ mapa_busqueda | urlencode }}&output=embed">
-            </iframe>
         </div>
+
 
         <div class="text-center mt-4">
             <a href="{{ url_for('index') }}" class="btn btn-primary px-4">

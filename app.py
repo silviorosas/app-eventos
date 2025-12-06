@@ -53,7 +53,7 @@ def agregar_evento():
     direccion = request.form.get("direccion")
 
     imagen = request.form.get("imagen") or \
-        "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop"
+        "https://github.com/silviorosas/app-eventos/blob/main/assets/multievento.png?raw=true"
 
     nuevo_evento = {
     "id": len(eventos),  # <-- id único

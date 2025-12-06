@@ -73,7 +73,7 @@ eventos = [
         "fecha": "2025-12-13",
         "hora": "15:00",
         "costo": "0",
-        "lugar": "Alem y Roque Saenz Peña Sindicato Municipal",
+        "lugar": "Leandro Alem y Roque Saenz Peña",
         "imagen": "https://github.com/silviorosas/app-eventos/blob/main/assets/ep2.jpeg?raw=true"
     }
 
