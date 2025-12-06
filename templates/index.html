@@ -49,30 +49,55 @@
             color: white;
         }
 
+        /* INICIO: CLASES DE BADGE CON COLORES VIVOS */
         .badge-purple {
-            background-color: #f3e8ff;
-            color: #9333ea;
+            background-color: #9C27B0;
+            /* Púrpura Intenso (Música) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
         }
 
         .badge-pink {
-            background-color: #fce7f3;
-            color: #db2777;
+            background-color: #E91E63;
+            /* Rosa/Magenta Vivo (Teatro) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
         }
 
         .badge-blue {
-            background-color: #dbeafe;
-            color: #2563eb;
+            background-color: #2196F3;
+            /* Azul Brillante (Arte) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
         }
 
         .badge-green {
-            background-color: #dcfce7;
-            color: #16a34a;
+            background-color: #4CAF50;
+            /* Verde Esmeralda Vivo (Deporte) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
         }
 
         .badge-orange {
-            background-color: #fed7aa;
-            color: #ea580c;
+            background-color: #FF9800;
+            /* Naranja Brillante (Gastronomía) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
         }
+        
+        .badge-magenta {
+            background-color: #FF00FF;
+            /* Magenta Brillante (Cine) */
+            color: white;
+            font-weight: 600;
+            padding: 0.4em 0.8em;
+        }
+        /* FIN: CLASES DE BADGE CON COLORES VIVOS */
 
         .card-event {
             transition: all 0.3s ease;
@@ -85,9 +110,53 @@
             transform: translateY(-5px);
         }
 
-        .card-event img {
+        /* Contenedor de la imagen para posicionar el badge de finalizado */
+        .card-event-image-container {
+            position: relative;
+            overflow: hidden;
+            border-top-left-radius: 0.375rem;
+            /* Bootstrap's .card-img-top border-radius */
+            border-top-right-radius: 0.375rem;
+        }
+
+        .card-event-image-container img {
             height: 200px;
             object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        /* Estilo para el badge de Finalizado (Bordó Suave) */
+        .finished-overlay-badge {
+            position: absolute;
+            top: 46px;
+            right: -15px;
+            /* Para que quede cruzado */
+            transform: rotate(45deg);
+            /* Cruza la esquina */
+            z-index: 10;
+            text-transform: uppercase;
+            background-color: #c55757;
+            /* Bordó Suave */
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.2rem 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            width: 150px;
+            /* Ancho para que cruce bien */
+            text-align: center;
+            /* Inicialmente oculto */
+            display: none;
+        }
+
+        /* Clase para eventos finalizados */
+        .event-finished .finished-overlay-badge {
+            display: inline-block;
+        }
+
+        /* Efecto visual al finalizar */
+        .event-finished .card-event-image-container img {
+            filter: brightness(0.6);
         }
 
         .card-description {
@@ -259,14 +328,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Inicio</a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Agenda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Lugares</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contacto</a>
+                        <a class="nav-link" href="{{ url_for('contacto') }}">Contacto</a>
                     </li>
                 </ul>
             </div>
@@ -316,75 +380,83 @@
     </section>
 
     <section class="container py-5">
-        <div class="mb-4">
-            <div class="row align-items-start">
-                <!-- Botones de categorías -->
-                <div class="col-12 col-lg-10 d-flex flex-wrap justify-content-center gap-2 mb-2 mb-lg-0">
-                    <button class="btn btn-outline-secondary category-btn active" data-category="todos">Todos</button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="musica">
-                        <i class="fas fa-music me-2"></i>Música
+        
+        <div class="row align-items-center mb-4">
+            
+            <div class="col-6 col-lg-3 mb-2 mb-lg-0">
+                <div class="dropdown w-100">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="categoryDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-current-category="todos">
+                        <i class="fas fa-filter me-2"></i>
+                        Categorías
                     </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="teatro">
-                        <i class="fas fa-theater-masks me-2"></i>Teatro
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="arte">
-                        <i class="fas fa-palette me-2"></i>Arte
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="deportes">
-                        <i class="fas fa-futbol me-2"></i>Deportes
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="gastronomia">
-                        <i class="fas fa-utensils me-2"></i>Gastronomía
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="educacion">
-                        <i class="fas fa-graduation-cap me-2"></i>Educación
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="vendimia">
-                        <i class="bi-basket-fill me-2"></i>Vendimia
-                    </button>
-                    <button class="btn btn-outline-secondary category-btn" data-category="fiesta">
-                        <i class="fa-solid fa-glass-cheers me-2"></i>Fiesta
-                    </button>
-                </div>
-
-                <!-- Botón Nuevo Evento arriba a la derecha -->
-                <div class="col-12 col-lg-2 d-flex justify-content-lg-end">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#nuevoEventoModal">
-                        <i class="fas fa-plus me-2"></i>Nuevo Evento
-                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item category-filter active" href="#" data-category="todos">Todos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="musica"><i
+                                        class="fas fa-music me-2"></i>Música</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="teatro"><i
+                                        class="fas fa-theater-masks me-2"></i>Teatro</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="arte"><i
+                                        class="fas fa-palette me-2"></i>Arte</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="deportes"><i
+                                        class="fas fa-futbol me-2"></i>Deportes</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="gastronomia"><i
+                                        class="fas fa-utensils me-2"></i>Gastronomía</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="educacion"><i
+                                        class="fas fa-graduation-cap me-2"></i>Educación</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="vendimia"><i
+                                        class="bi-basket-fill me-2"></i>Vendimia</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="fiesta"><i
+                                        class="fa-solid fa-glass-cheers me-2"></i>Fiesta</a></li>
+                        <li><a class="dropdown-item category-filter" href="#" data-category="cine"><i
+                                        class="fa-solid fa-film me-2"></i>Cine</a></li>
+                    </ul>
                 </div>
             </div>
+
+            <div class="col-lg-7 d-none d-lg-block"></div>
+            
+            <div class="col-6 col-lg-2 d-flex justify-content-end">
+                <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#nuevoEventoModal">
+                    <i class="fas fa-plus me-2"></i>Nuevo Evento
+                </button>
+            </div>
         </div>
-
-
         <div class="row g-4" id="eventsContainer">
             {% for e in eventos %}
-            <div class="col-md-6 col-lg-4" data-tipo="{{ e.tipo | lower }}">
+            <div class="col-md-6 col-lg-4 event-card-column" data-tipo="{{ e.tipo | lower }}" data-fecha="{{ e.fecha }}">
 
                 <div class="card card-event">
 
-                    <img src="{{ e.imagen }}" class="card-img-top" alt="{{ e.tipo }}">
-
-
+                    <div class="card-event-image-container">
+                        <img src="{{ e.imagen }}" class="card-img-top" alt="{{ e.tipo }}">
+                        <span class="finished-overlay-badge">Finalizado</span>
+                    </div>
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
 
-                            <!-- Badge según tipo -->
                             {% if e.tipo == 'Música' %}
-                            <span class="badge badge-purple">Música</span>
+                            <span class="badge badge-purple">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Teatro' %}
-                            <span class="badge badge-pink">Teatro</span>
+                            <span class="badge badge-pink">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Arte' %}
-                            <span class="badge badge-blue">Arte</span>
+                            <span class="badge badge-blue">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Deporte' %}
-                            <span class="badge badge-green">Deporte</span>
+                            <span class="badge badge-green">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Gastronomía' %}
-                            <span class="badge badge-orange">Gastronomía</span>
-                            {% else %}
-                            <span class="badge bg-secondary">{{ e.tipo }}</span>
+                            <span class="badge badge-orange">{{ e.tipo }}</span>
+                            {% elif e.tipo == 'Educación' %}
+                            <span class="badge bg-info text-dark">{{ e.tipo }}</span> 
+                            {% elif e.tipo == 'Vendimia' %}
+                            <span class="badge bg-danger">{{ e.tipo }}</span> 
+                            {% elif e.tipo == 'Fiesta' %}
+                            <span class="badge bg-warning text-dark">{{ e.tipo }}</span> 
+                            {% elif e.tipo == 'Cine' %}
+                            <span class="badge badge-magenta">{{ e.tipo }}</span> {% else %}
+                            <span class="badge bg-primary">{{ e.tipo }}</span> 
                             {% endif %}
-
                             <small class="text-muted">
                                 <i class="far fa-calendar me-1"></i>{{ e.fecha }}
                             </small>
@@ -427,6 +499,7 @@
                 </div>
                 <p class="mt-2 text-muted">Cargando más eventos...</p>
             </div>
+        </div>
     </section>
 
     <div class="modal fade" id="nuevoEventoModal" tabindex="-1" aria-labelledby="nuevoEventoModalLabel"
@@ -462,7 +535,8 @@
                                 <option value="Teatro">Teatro</option>
                                 <option value="Arte">Arte</option>
                                 <option value="Gastronomía">Gastronomía</option>
-                                <option value="Vendimia">Vendimia</option>                                
+                                <option value="Vendimia">Vendimia</option>
+                                <option value="Cine">Cine</option>
                             </select>
                         </div>
 
@@ -484,7 +558,6 @@
                                 <input type="number" class="form-control" name="costo" placeholder="0">
                             </div>
 
-                            <!-- SELECT LUGAR CORTO (valor largo para maps) -->
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Localidad</label>
                                 <select class="form-select" name="lugar" required>
@@ -500,7 +573,6 @@
                             </div>
                         </div>
 
-                        <!-- NUEVO CAMPO DE DIRECCIÓN -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Dirección (calle y número o ruta)</label>
                             <input type="text" class="form-control" name="direccion"
@@ -545,18 +617,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ---------------------------
-        //  ACTIVAR BOTONES DE FILTRO
-        // ---------------------------
-        document.querySelectorAll('.category-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        // La sección de ACTIVAR BOTONES DE FILTRO se elimina ya que ahora usamos el dropdown.
 
         // ---------------------------
-        //  VARIABLES GLOBALES
+        //  VARIABLES GLOBALES
         // ---------------------------
         let isLoading = false;
         let filtroActivo = "todos";
@@ -564,13 +628,46 @@
         const eventsContainer = document.getElementById('eventsContainer');
         const loadingSpinner = document.getElementById('loadingSpinner');
 
-        // 👉 Guardamos SOLO las cards originales antes de que se clonen
+        // 👉 Guardamos SOLO las cards originales usando la clase específica
         const originalCards = Array.from(
-            eventsContainer.querySelectorAll('.col-md-6, .col-lg-4')
+            eventsContainer.querySelectorAll('.event-card-column')
         );
 
+
         // ---------------------------
-        //  SCROLL INFINITO (solo si filtro = todos)
+        //  FUNCIÓN: AGREGAR ESTADO DE FINALIZADO (REVISADA)
+        // ---------------------------
+        function updateEventStatuses() {
+            const today = new Date();
+            // Normalizar la fecha de hoy a medianoche (00:00:00) para una comparación justa
+            today.setHours(0, 0, 0, 0);
+
+            // Iterar sobre todos los eventos visibles (originales + clones)
+            document.querySelectorAll('#eventsContainer .event-card-column').forEach(cardColumn => {
+                const dateString = cardColumn.dataset.fecha;
+
+                if (!dateString) return;
+
+                // Crear un objeto Date a partir de la fecha del evento, también normalizando la hora
+                const eventDate = new Date(dateString + 'T00:00:00');
+
+                // Comprobar si la fecha del evento es estrictamente anterior a hoy
+                if (eventDate < today) {
+                    // Aplicar la clase para mostrar el badge de finalizado y oscurecer la imagen
+                    cardColumn.classList.add('event-finished');
+                } else {
+                    // Asegurarse de que la clase no esté si el evento no ha terminado
+                    cardColumn.classList.remove('event-finished');
+                }
+            });
+        }
+
+        // Llamar a la función al cargar la página para evaluar el estado inicial
+        window.addEventListener('load', updateEventStatuses);
+
+
+        // ---------------------------
+        //  SCROLL INFINITO (solo si filtro = todos)
         // ---------------------------
         function loadMoreEvents() {
             if (filtroActivo !== "todos") return; // NO clonar si hay filtro
@@ -580,9 +677,8 @@
             loadingSpinner.classList.add('active');
 
             setTimeout(() => {
-                const existingEvents = eventsContainer.querySelectorAll('.col-md-6, .col-lg-4');
-
-                existingEvents.forEach(eventCard => {
+                // Se usa la lista original de cards
+                originalCards.forEach(eventCard => {
                     const clonedCard = eventCard.cloneNode(true);
 
                     // 🔥 Marcamos los clones para no mostrarlos al filtrar
@@ -593,6 +689,9 @@
 
                 loadingSpinner.classList.remove('active');
                 isLoading = false;
+
+                // Llamamos a la función de estado para evaluar los clones recién agregados
+                updateEventStatuses();
             }, 800);
         }
 
@@ -611,18 +710,27 @@
 
 
         // ---------------------------
-        //  FILTRO POR CATEGORÍAS
+        //  LÓGICA DE FILTRO POR CATEGORÍAS (MODIFICADO PARA DROPDOWN)
         // ---------------------------
-        document.querySelectorAll('.category-btn').forEach(button => {
-            button.addEventListener('click', function () {
+        document.querySelectorAll('.category-filter').forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault(); // Evitar navegación por el href="#"
 
                 filtroActivo = this.dataset.category;
+                // Obtener el texto del elemento (ej: "Música")
+                // Reemplazamos los íconos (si existen) con un string vacío antes de recortar el texto.
+                const categoriaNombre = this.textContent.trim().replace(/[\u0000-\u007F]/g, '').trim() || this.textContent.trim();
+                const mainDropdownButton = document.getElementById('categoryDropdown');
 
-                document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                // 1. Actualizar el estado 'active' en los ítems del dropdown
+                document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
 
-                const categoria = this.dataset.category;
+                // 2. Actualizar el texto del botón principal del dropdown
+                mainDropdownButton.innerHTML = `<i class="fas fa-filter me-2"></i>Categorías: ${categoriaNombre}`;
+                mainDropdownButton.dataset.currentCategory = filtroActivo;
 
+                // 3. Aplicar el filtro a las cards visibles
                 // 🔥 Ocultar siempre todos los CLONES
                 document.querySelectorAll('.clonado').forEach(clone => {
                     clone.style.display = "none";
@@ -633,15 +741,17 @@
                     const tipoEvento = card.dataset.tipo;
                     const normalizar = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-                    if (categoria === "todos") {
+                    if (filtroActivo === "todos") {
                         card.style.display = "block";
-                    } else if (normalizar(tipoEvento) === normalizar(categoria)) {
+                    } else if (normalizar(tipoEvento) === normalizar(filtroActivo)) {
                         card.style.display = "block";
                     } else {
                         card.style.display = "none";
                     }
                 });
 
+                // Re-evaluar estados después del filtrado
+                updateEventStatuses();
             });
         });
     </script>

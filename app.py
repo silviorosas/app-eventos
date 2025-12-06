@@ -76,5 +76,11 @@ def agregar_evento():
     return redirect(url_for("index"))
 
 
+# En app.py, agrégalo debajo de las otras rutas
+@app.route("/contacto")
+def contacto():
+    return render_template("contacto.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
