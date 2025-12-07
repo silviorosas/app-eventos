@@ -12,10 +12,21 @@ def index():
     # Ordenar eventos por fecha ascendente (los más próximos primero)
     eventos_ordenados = sorted(
         eventos,
-        key=lambda e: datetime.strptime(e["fecha"], "%Y-%m-%d")
+        key=lambda e: datetime.strptime(e["fecha_inicio"], "%Y-%m-%d")
     )
 
     return render_template("index.html", eventos=eventos_ordenados)
+
+@app.template_filter('format_date')
+def format_date_filter(date_string):
+    """Convierte la fecha de YYYY-MM-DD a DD-MM-YYYY."""
+    try:
+        # 1. Parsear la cadena de fecha (formato YYYY-MM-DD)
+        date_obj = datetime.strptime(date_string, "%Y-%m-%d")
+        # 2. Formatear al nuevo formato (DD-MM-YYYY)
+        return date_obj.strftime("%d-%m-%Y")
+    except (ValueError, TypeError):
+        return date_string # Devuelve la cadena original si hay un error
 
 
 @app.route("/evento/<int:event_id>")
@@ -33,7 +44,8 @@ def agregar_evento():
     nombre = request.form.get("nombre")
     descripcion = request.form.get("descripcion")
     tipo = request.form.get("tipo")
-    fecha = request.form.get("fecha")
+    fecha_inicio = request.form.get("fecha_inicio")
+    fecha_fin = request.form.get("fecha_fin")
     hora = request.form.get("hora")
     costo = request.form.get("costo") or "0"
 
@@ -60,7 +72,8 @@ def agregar_evento():
     "nombre": nombre,
     "descripcion": descripcion,
     "tipo": tipo,
-    "fecha": fecha,
+    "fecha_inicio": fecha_inicio,
+    "fecha_fin": fecha_fin,
     "hora": hora,
     "costo": costo,
     "lugar": lugar,             # largo para Maps

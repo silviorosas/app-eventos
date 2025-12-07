@@ -77,9 +77,15 @@
                             <div class="d-flex justify-content-between mb-3">
                                 <span class="badge bg-primary">{{ evento.tipo }}</span>
                                 <span class="text-muted small">
-                                    <i class="far fa-calendar me-1"></i>{{ evento.fecha }} |
-                                    <i class="far fa-clock ms-2 me-1"></i>{{ evento.hora }}
-                                </span>
+    <i class="far fa-calendar me-1"></i>
+    {% if evento.fecha_inicio == evento.fecha_fin %}
+        {{ evento.fecha_inicio }}
+    {% else %}
+        {{ evento.fecha_inicio }} al {{ evento.fecha_fin }}
+    {% endif %}
+    |
+    <i class="far fa-clock ms-2 me-1"></i>{{ evento.hora }}
+</span>
                             </div>
 
                             <p class="text-muted mt-2">{{ evento.descripcion }}</p>

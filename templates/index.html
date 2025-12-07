@@ -89,7 +89,7 @@
             font-weight: 600;
             padding: 0.4em 0.8em;
         }
-        
+
         .badge-magenta {
             background-color: #FF00FF;
             /* Magenta Brillante (Cine) */
@@ -97,6 +97,7 @@
             font-weight: 600;
             padding: 0.4em 0.8em;
         }
+
         /* FIN: CLASES DE BADGE CON COLORES VIVOS */
 
         .card-event {
@@ -380,9 +381,9 @@
     </section>
 
     <section class="container py-5">
-        
+
         <div class="row align-items-center mb-4">
-            
+
             <div class="col-6 col-lg-3 mb-2 mb-lg-0">
                 <div class="dropdown w-100">
                     <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="categoryDropdown"
@@ -391,32 +392,35 @@
                         Categorías
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                        <li><a class="dropdown-item category-filter active" href="#" data-category="todos">Todos</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item category-filter active" href="#" data-category="todos">Todos</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="musica"><i
-                                        class="fas fa-music me-2"></i>Música</a></li>
+                                    class="fas fa-music me-2"></i>Música</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="teatro"><i
-                                        class="fas fa-theater-masks me-2"></i>Teatro</a></li>
+                                    class="fas fa-theater-masks me-2"></i>Teatro</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="arte"><i
-                                        class="fas fa-palette me-2"></i>Arte</a></li>
+                                    class="fas fa-palette me-2"></i>Arte</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="deportes"><i
-                                        class="fas fa-futbol me-2"></i>Deportes</a></li>
+                                    class="fas fa-futbol me-2"></i>Deportes</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="gastronomia"><i
-                                        class="fas fa-utensils me-2"></i>Gastronomía</a></li>
+                                    class="fas fa-utensils me-2"></i>Gastronomía</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="educacion"><i
-                                        class="fas fa-graduation-cap me-2"></i>Educación</a></li>
+                                    class="fas fa-graduation-cap me-2"></i>Educación</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="vendimia"><i
-                                        class="bi-basket-fill me-2"></i>Vendimia</a></li>
+                                    class="bi-basket-fill me-2"></i>Vendimia</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="fiesta"><i
-                                        class="fa-solid fa-glass-cheers me-2"></i>Fiesta</a></li>
+                                    class="fa-solid fa-glass-cheers me-2"></i>Fiesta</a></li>
                         <li><a class="dropdown-item category-filter" href="#" data-category="cine"><i
-                                        class="fa-solid fa-film me-2"></i>Cine</a></li>
+                                    class="fa-solid fa-film me-2"></i>Cine</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="col-lg-7 d-none d-lg-block"></div>
-            
+
             <div class="col-6 col-lg-2 d-flex justify-content-end">
                 <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#nuevoEventoModal">
                     <i class="fas fa-plus me-2"></i>Nuevo Evento
@@ -425,7 +429,8 @@
         </div>
         <div class="row g-4" id="eventsContainer">
             {% for e in eventos %}
-            <div class="col-md-6 col-lg-4 event-card-column" data-tipo="{{ e.tipo | lower }}" data-fecha="{{ e.fecha }}">
+            <div class="col-md-6 col-lg-4 event-card-column" data-tipo="{{ e.tipo | lower }}"
+                data-fecha="{{ e.fecha_fin }}">
 
                 <div class="card card-event">
 
@@ -448,18 +453,26 @@
                             {% elif e.tipo == 'Gastronomía' %}
                             <span class="badge badge-orange">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Educación' %}
-                            <span class="badge bg-info text-dark">{{ e.tipo }}</span> 
+                            <span class="badge bg-info text-dark">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Vendimia' %}
-                            <span class="badge bg-danger">{{ e.tipo }}</span> 
+                            <span class="badge bg-danger">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Fiesta' %}
-                            <span class="badge bg-warning text-dark">{{ e.tipo }}</span> 
+                            <span class="badge bg-warning text-dark">{{ e.tipo }}</span>
                             {% elif e.tipo == 'Cine' %}
                             <span class="badge badge-magenta">{{ e.tipo }}</span> {% else %}
-                            <span class="badge bg-primary">{{ e.tipo }}</span> 
+                            <span class="badge bg-primary">{{ e.tipo }}</span>
                             {% endif %}
-                            <small class="text-muted">
-                                <i class="far fa-calendar me-1"></i>{{ e.fecha }}
-                            </small>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted small d-block">
+                                <i class="far fa-calendar me-1"></i>
+                                {% if e.fecha_inicio == e.fecha_fin %}
+                                {{ e.fecha_inicio | format_date }}
+                                {% else %}
+                                {{ e.fecha_inicio | format_date }} al {{ e.fecha_fin | format_date }}
+                                {% endif %}
+                                <i class="far fa-clock ms-2 me-1"></i>{{ e.hora }}
+                            </span>
                         </div>
 
                         <h5 class="card-title fw-bold">{{ e.nombre }}</h5>
@@ -542,13 +555,17 @@
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Fecha</label>
-                                <input type="date" class="form-control" name="fecha" required>
+                                <label class="form-label fw-semibold">Fecha de Inicio</label>
+                                <input type="date" class="form-control" name="fecha_inicio" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Hora</label>
-                                <input type="time" class="form-control" name="hora" required>
+                                <label class="form-label fw-semibold">Fecha de Fin</label>
+                                <input type="date" class="form-control" name="fecha_fin" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Hora</label>
+                            <input type="time" class="form-control" name="hora" required>
                         </div>
 
                         <div class="row g-3 mb-3">
