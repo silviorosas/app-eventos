@@ -16,7 +16,7 @@ eventos = [
         "nombre": "Velada Cultural por el Agua",
         "descripcion": "Defendamos el agua con danza, música, pintura, poesía, teatro y más.",
         "tipo": "Arte",
-        "fecha_inicio": "2025-12-08",
+        "fecha_inicio": "2025-12-20",
         "fecha_fin": "2025-12-15",
         "hora": "20:00",
         "costo": "0",
